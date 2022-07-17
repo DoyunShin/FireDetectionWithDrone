@@ -1,0 +1,8 @@
+flask
+flask_compress
+flask_cors
+tensorflow
+imageai
+requests
+opencv-python
+djitellopy

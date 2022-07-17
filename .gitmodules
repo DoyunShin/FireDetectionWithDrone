@@ -1,6 +1,6 @@
 [submodule "RMTT_Libs"]
 	path = RMTT_Libs
 	url = https://github.com/RoboMaster/RMTT_Libs.git
-[submodule "fire-detection-cnn"]
-	path = fire-detection-cnn
-	url = https://github.com/DoyunShin/fire-detection-cnn
+[submodule "FireNET"]
+	path = FireNET
+	url = https://github.com/OlafenwaMoses/FireNET.git
