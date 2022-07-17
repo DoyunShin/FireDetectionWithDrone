@@ -32,3 +32,4 @@ class firenet():
         return drawn_image, output_objects_array, detected_objects_image_array
         pass
 
+#https://github.com/OlafenwaMoses/FireNET/releases/download/v1.0/detection_model-ex-33--loss-4.97.h5
