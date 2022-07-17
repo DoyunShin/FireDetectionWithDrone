@@ -22,8 +22,8 @@ class firenet():
     def load_model(self):
         self.detector = self.modules.imageai.Detection.Custom.CustomObjectDetection()
         self.detector.setModelTypeAsYOLOv3()
-        self.detector.setModelPath(self.modules.detection_model_path)
-        self.detector.setJsonPath(self.modules.configuration_json)
+        self.detector.setModelPath("detection_model-ex-33--loss-4.97.h5")
+        self.detector.setJsonPath("detection_config.json")
         self.detector.loadModel()
         pass
 
@@ -32,4 +32,3 @@ class firenet():
         return drawn_image, output_objects_array, detected_objects_image_array
         pass
 
-    
