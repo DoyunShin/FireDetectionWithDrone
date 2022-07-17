@@ -15,7 +15,7 @@ class firenet():
         self.modules.time = importlib.import_module('time')
         self.modules.PIL = importlib.import_module('PIL')
         self.modules.six = importlib.import_module('six')
-
+                                                                                                
         self.drone = self.modules.dji.Tello()
         pass
 

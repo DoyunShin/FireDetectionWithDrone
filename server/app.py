@@ -46,6 +46,8 @@ def dji_frame_detect(string):
     return storage.firenet.modules.cv2.imencode('.jpg', image)[1].tobytes(), 200
 
 
-
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host='0.0.0.0', port=8080, debug=True)
 
 
