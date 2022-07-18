@@ -29,6 +29,7 @@ class Storage():
 from flask import *
 from flask_compress import Compress
 from flask_cors import CORS
+import requests
 import os
 
 storage = Storage()
@@ -47,10 +48,16 @@ def nf2():
 
 @app.route('/api/drone/locateinfo', methods=['GET'])
 def dji_status():
+    if storage.time.time() - storage.summarytime > 20:
+        storage.summarytime = storage.time.time()
+        storage.time.sleep(2)
+    else:
+        storage.summarytime = storage.time.time()
     rtn = {"status": 200, "message": "OK"}
     data = {}
     data.update({"lat": storage.dji.lat})
     data.update({"lng": storage.dji.lng})
+    data.update({"detected": storage.dji.detected})
     rtn.update({"data": data})
     return rtn, 200
 
@@ -76,6 +83,23 @@ def dji_frame():
     #print("LNG OK")
     rtn.update({"data": data})
     return rtn, 200
+
+@app.route('/api/drone/weather')
+def weather():
+    param = {
+        "serviceKey": "yy0vBlt7HwfUrdgLyhGHmJDELHnoI6h6Xs+j74Z49X50gO9Q8vtqAlEu4vQU/N+vz0iychRQMFH6kka6Xhpt1g==",
+        "pageNo": "1",
+        "numOfRows": "1000",
+        "dataType": "json",
+        "base_date": "20220718",
+        "base_time": "1200",
+        "nx": "38",
+        "ny": "127"
+    }
+    url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
+    response = requests.get(url, params=param)
+    return response.text, response.status_code
+
 
 @app.route('/api/drone/image')
 def dji_image():

@@ -7,8 +7,8 @@ params = {
     "numOfRows": "1000",
     "dataType": "json",
     "base_date": "20220718",
-    "base_time": "0800",
-    "nx": "55",
+    "base_time": "1200",
+    "nx": "38",
     "ny": "127"
 }
 

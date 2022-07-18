@@ -21,8 +21,8 @@ class dji():
         self.detectedtime = 0
         self.image = None
         self.image_base64 = None
-        self.lat = 0
-        self.lng = 0
+        self.lat = 37.401946
+        self.lng = 126.664773
 
         self.connect()
         pass
@@ -43,6 +43,7 @@ class dji():
         self.battime = self.modules.time.time()
         self.battery = self.drone.get_battery()
         while True:
+            print("DETECT", self.detected)
             if self.modules.time.time() - self.storage.summarytime < 20:
                 if self.modules.time.time() - self.battime > 30:
                     self.battime = self.modules.time.time()
@@ -50,6 +51,7 @@ class dji():
                 
                 detected_image, output_objects_array, detected_objects_image_array = self.storage.firenet.detect(self.drone.get_frame_read().frame)
                 # deted_image to base64
+                detected_image = self.storage.firenet.modules.cv2.imencode('.png', detected_image)[1].tobytes()
                 self.image_base64 = self.modules.base64.b64encode(detected_image).decode('utf-8')
                 self.image = detected_image
                 if output_objects_array != []:
@@ -57,11 +59,11 @@ class dji():
                     self.detectedtime = self.modules.time.time()
                 else:
                     # if self.detectedtime is after 10 sec
-                    if self.modules.time.time() - self.detectedtime > 10:
+                    if self.modules.time.time() - self.detectedtime > 60:
                         self.detected = False
                         self.detectedtime = 0
-            self.modules.time.sleep(1)
-            pass
+                #self.modules.time.sleep(1)
+                pass
         pass
 
 #    def send(self):
