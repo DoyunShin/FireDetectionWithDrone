@@ -1,6 +1,3 @@
-from server.app import storage
-
-
 class dummy():
     def __init__(self):
         pass
@@ -9,23 +6,30 @@ class dummy():
 class dji():
     def __init__(self, storage):
         import importlib
+        from djitellopy import tello
 
         self.storage = storage
         self.modules = dummy()
-        self.modules.dji = importlib.import_module('dji').tello
         self.modules.time = importlib.import_module('time')
+        self.modules.base64 = importlib.import_module('base64')
         
-        
-        self.drone = self.modules.dji.Tello()
+        self.drone = tello.Tello()
+
+
+        self.battery = 0
+        self.detected = False
+        self.detectedtime = 0
+        self.image = None
+        self.image_base64 = None
+        self.lat = 0
+        self.lng = 0
+
+        self.connect()
         pass
 
     def connect(self):
         self.drone.connect()
         self.drone.streamon()
-        pass
-
-    def status_drone(self):
-        return self.drone.get_battery()
         pass
 
     def frame(self):
@@ -35,6 +39,33 @@ class dji():
         self.drone.close()
         pass
 
+    def autoupdate(self):
+        self.battime = self.modules.time.time()
+        self.battery = self.drone.get_battery()
+        while True:
+            if self.modules.time.time() - self.storage.summarytime < 20:
+                if self.modules.time.time() - self.battime > 30:
+                    self.battime = self.modules.time.time()
+                    self.battery = self.drone.get_battery()
+                
+                detected_image, output_objects_array, detected_objects_image_array = self.storage.firenet.detect(self.drone.get_frame_read().frame)
+                # deted_image to base64
+                self.image_base64 = self.modules.base64.b64encode(detected_image).decode('utf-8')
+                self.image = detected_image
+                if output_objects_array != []:
+                    self.detected = True
+                    self.detectedtime = self.modules.time.time()
+                else:
+                    # if self.detectedtime is after 10 sec
+                    if self.modules.time.time() - self.detectedtime > 10:
+                        self.detected = False
+                        self.detectedtime = 0
+            self.modules.time.sleep(1)
+            pass
+        pass
+
+#    def send(self):
+#        self.drone.send_command_with_return("")
 
 if __name__=="__main__":
     from firenet import firenet
